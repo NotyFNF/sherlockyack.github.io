@@ -5,127 +5,93 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Cuenta atrás - Sherlock Yack en Clan</title>
 
-  <!-- Favicon (logo de Clan en la pestaña del navegador) -->
+  <!-- Favicon (logo de Clan en la pestaña) -->
   <link rel="icon" type="image/png" href="clan.png">
 
-  <!-- Fuente estilo retro -->
+  <!-- Fuente -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-  <!-- Open Graph / Twitter Card para que aparezca el logo de la web al compartir -->
+  <!-- Open Graph / Twitter Card -->
   <meta property="og:title" content="Cuenta atrás - Sherlock Yack en Clan">
   <meta property="og:description" content="Cuenta atrás para la próxima emisión de Sherlock Yack en Clan TV">
   <meta property="og:image" content="logo.png">
   <meta property="og:type" content="website">
-
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cuenta atrás - Sherlock Yack en Clan">
-  <meta name="twitter:description" content="Cuenta atrás para la próxima emisión de Sherlock Yack en Clan TV">
   <meta name="twitter:image" content="logo.png">
 
   <style>
-    body{
-      margin:0; padding:0;
-      font-family: 'Press Start 2P', monospace;
-      height:100vh;
-      overflow:hidden;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      background:black;
-      color:white;
-      text-shadow:2px 2px 6px #000;
-    }
+    html,body{height:100%;margin:0;font-family:'Press Start 2P',monospace;background:black;color:white}
+    body{display:flex;align-items:center;justify-content:center;overflow:hidden}
 
-    .background{
-      position:fixed;
-      top:0; left:0;
-      width:100%; height:100%;
-      background: url('sherlock.png') no-repeat center center;
-      background-size: cover;
-      z-index:-2;
-      animation: moveBg 20s linear infinite;
+    .background {
+  position: fixed; inset: 0;
+  background: url('sherlock.png') no-repeat center center;
+  background-size: cover;
+  z-index: 0; /* antes estaba -2 */
     }
-
     @keyframes moveBg{
-      0% {transform: scale(1) translate(0,0);}
-      50% {transform: scale(1.05) translate(10px,10px);}
-      100% {transform: scale(1) translate(0,0);}
+      0% {transform: scale(1);}
+      50% {transform: scale(1.05);}
+      100% {transform: scale(1);}
     }
 
     .overlay-bg{
-      position:fixed;
-      top:0; left:0;
-      width:100%; height:100%;
-      background: rgba(0,0,0,0.4);
+      position:fixed; inset:0;
+      background: rgba(0,0,0,0.2); /* más transparente para que se vea bien */
       z-index:-1;
-      pointer-events:none;
-      animation: shine 4s ease-in-out infinite alternate;
     }
 
-    @keyframes shine{
-      0% {background: rgba(0,0,0,0.4);}
-      50% {background: rgba(0,0,0,0.25);}
-      100% {background: rgba(0,0,0,0.4);}
-    }
-
-    .overlay{
+    .card{
       background: rgba(0,0,0,0.6);
-      padding:40px 30px;
-      border-radius:16px;
+      padding: 36px 28px;
+      border-radius: 14px;
+      box-shadow: 0 14px 50px rgba(0,0,0,0.6);
       text-align:center;
-      box-shadow:0 10px 40px rgba(0,0,0,0.5);
-      animation: fadeIn 1.2s ease-out;
+      max-width:760px;
+      width:calc(100% - 300px);
+      z-index:2;
+      margin-right:20px;
     }
 
-    .logo{
-      width:80px;
-      margin-bottom:20px;
+    .logo{width:90px;margin-bottom:20px;display:inline-block}
+
+    h1{margin:0 0 12px;font-size:1.9rem;color:white}
+
+    p.lead{margin:0 0 14px;color:#ffd; font-size:0.78rem}
+
+    .timer{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+    .unit{min-width:84px;padding:12px;border-radius:10px;background: rgba(255,255,255,0.08)}
+    .num{font-size:1.6rem}
+    .label{font-size:0.68rem;margin-top:6px;display:block;color:#e8e8e8}
+    #status{margin-top:14px;color:#ffd700;font-size:0.78rem}
+
+    /* Playlist más pequeña */
+    .player-wrap{
+      position:fixed;
+      bottom:20px; right:20px;
+      width:260px; height:160px;
+      z-index:5;
+    }
+    .player-card{
+      background: rgba(0,0,0,0.55);
+      border-radius:12px;
+      padding:6px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.5);
+      height:100%;
+    }
+    .player-frame{width:100%;height:100%;border-radius:8px;overflow:hidden}
+    .player-frame iframe{width:100%;height:100%;border:0;display:block}
+
+    .player-text{
+      font-size:0.6rem;
+      color:#fff;
+      margin-bottom:4px;
+      text-align:center;
     }
 
-    h1{
-      font-size:2rem;
-      margin-bottom:16px;
-    }
-
-    .timer{
-      display:flex;
-      justify-content:center;
-      flex-wrap:wrap;
-      gap:12px;
-      margin-top:20px;
-    }
-
-    .unit{
-      min-width:80px;
-      padding:12px;
-      border-radius:10px;
-      background: rgba(255,255,255,0.2);
-      transition: transform 0.3s ease;
-    }
-
-    .unit:hover{
-      transform: scale(1.1);
-    }
-
-    .num{
-      font-size:1.8rem;
-    }
-
-    .label{
-      font-size:0.7rem;
-      margin-top:4px;
-      display:block;
-    }
-
-    #status{
-      margin-top:16px;
-      font-size:0.9rem;
-      color:#ffd700;
-    }
-
-    @keyframes fadeIn{
-      from {opacity:0; transform: translateY(-20px);}
-      to {opacity:1; transform: translateY(0);}
+    @media (max-width:600px){
+      .card{width:calc(100% - 40px);margin-right:0;padding:28px}
+      .player-wrap{width:200px; height:120px; bottom:10px; right:10px}
     }
   </style>
 </head>
@@ -133,12 +99,10 @@
   <div class="background"></div>
   <div class="overlay-bg"></div>
 
-  <div class="overlay">
-    <!-- Logo visible en la web -->
+  <div class="card">
     <img src="logo.png" alt="Logo Sherlock Yack" class="logo">
-
-    <h1>¡Sherlock Yack llega a Clan!</h1>
-    <p>Próxima emisión: 23 de octubre a las 06:24 AM</p>
+    <h1>¡Sherlock Yack VUELVE a Clan!</h1>
+    <p class="lead">Próxima emisión: 23 de octubre a las 06:24 AM</p>
 
     <div class="timer">
       <div class="unit"><div class="num" id="days">0</div><span class="label">Días</span></div>
@@ -150,23 +114,30 @@
     <div id="status">Cargando...</div>
   </div>
 
+  <!-- YouTube Player pequeño en la esquina -->
+  <div class="player-wrap">
+    <div class="player-card">
+      <div class="player-text">De mientras puedes ver episodios aquí</div>
+      <div class="player-frame">
+        <iframe src="https://www.youtube.com/embed?listType=playlist&list=PL6xrS_sj0OATFLMiaEv0lgm_1khMFOCo0&autoplay=0&controls=1&rel=0&loop=0&iv_load_policy=3"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          title="Playlist Sherlock Yack"></iframe>
+      </div>
+    </div>
+  </div>
+
   <script>
     const $ = id => document.getElementById(id);
     function pad(n){ return String(n).padStart(2,'0'); }
-
     const nextShows = [
       new Date('2025-10-23T06:24:00'),
       new Date('2025-10-24T06:24:00'),
       new Date('2025-10-25T06:24:00')
     ];
-
-    function getNextShow(){
-      const now = new Date();
-      return nextShows.find(d => d > now) || null;
-    }
-
+    function getNextShow(){ const now=new Date(); return nextShows.find(d=>d>now)||null; }
     function updateCountdown(){
-      const target = getNextShow();
+      const target=getNextShow();
       if(!target){
         $('days').textContent='0';
         $('hours').textContent='00';
@@ -175,19 +146,18 @@
         $('status').textContent='No hay próximas emisiones.';
         return;
       }
-      const diff = Math.max(0,target - new Date());
-      const sec = Math.floor(diff/1000);
-      const days = Math.floor(sec / 86400);
-      const hours = Math.floor((sec % 86400)/3600);
-      const minutes = Math.floor((sec % 3600)/60);
-      const seconds = sec % 60;
-      $('days').textContent = days;
-      $('hours').textContent = pad(hours);
-      $('minutes').textContent = pad(minutes);
-      $('seconds').textContent = pad(seconds);
-      $('status').textContent = 'Faltan ' + days + ' días y ' + pad(hours)+':'+pad(minutes)+':'+pad(seconds)+' para la próxima emisión.';
+      const diff=Math.max(0,target-new Date());
+      const sec=Math.floor(diff/1000);
+      const days=Math.floor(sec/86400);
+      const hours=Math.floor((sec%86400)/3600);
+      const minutes=Math.floor((sec%3600)/60);
+      const seconds=sec%60;
+      $('days').textContent=days;
+      $('hours').textContent=pad(hours);
+      $('minutes').textContent=pad(minutes);
+      $('seconds').textContent=pad(seconds);
+      $('status').textContent='Faltan '+days+' días y '+pad(hours)+':'+pad(minutes)+':'+pad(seconds)+' para la próxima emisión.';
     }
-
     setInterval(updateCountdown,250);
     updateCountdown();
   </script>
