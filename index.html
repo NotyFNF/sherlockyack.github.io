@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cuenta atrás - Sherlock Yack en Clan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    body{
+      margin:0; padding:0;
+      font-family: 'Press Start 2P', monospace;
+      height:100vh;
+      display:flex; justify-content:center; align-items:center;
+      overflow: hidden;
+      background: black;
+    }
+
+    /* Fondo con animación de brillo y movimiento sutil */
+    .background{
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background: url('sherlock.png') no-repeat center center;
+      background-size: cover;
+      z-index:-2;
+      animation: moveBg 20s linear infinite;
+    }
+
+    /* Overlay de brillo animado */
+    .overlay-bg{
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background: rgba(0,0,0,0.4);
+      z-index:-1;
+      pointer-events:none;
+      animation: shine 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes moveBg{
+      0% {transform: scale(1) translate(0,0);}
+      50% {transform: scale(1.05) translate(10px,10px);}
+      100% {transform: scale(1) translate(0,0);}
+    }
+
+    @keyframes shine{
+      0% {background: rgba(0,0,0,0.4);}
+      50% {background: rgba(0,0,0,0.25);}
+      100% {background: rgba(0,0,0,0.4);}
+    }
+
+    .overlay{
+      background: rgba(0,0,0,0.6);
+      padding: 40px 30px;
+      border-radius: 16px;
+      text-align:center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      animation: fadeIn 1.2s ease-out;
+      color: #fff;
+      text-shadow: 2px 2px 6px #000;
+    }
+
+    h1{
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+
+    .timer{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap: 12px;
+      margin-top:20px;
+    }
+
+    .unit{
+      min-width:80px;
+      padding:12px;
+      border-radius:10px;
+      background: rgba(255,255,255,0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .unit:hover{
+      transform: scale(1.1);
+    }
+
+    .num{
+      font-size: 1.8rem;
+    }
+
+    .label{
+      font-size: 0.7rem;
+      margin-top:4px;
+      display:block;
+    }
+
+    #status{
+      margin-top:16px;
+      font-size:0.9rem;
+      color:#ffd700;
+    }
+
+    @keyframes fadeIn{
+      from {opacity:0; transform: translateY(-20px);}
+      to {opacity:1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+  <div class="overlay-bg"></div>
+
+  <div class="overlay">
+    <h1>¡Sherlock Yack vuelve a Clan!</h1>
+    <p>Próxima emisión: 23 de octubre a las 06:24 AM</p>
+    <div class="timer">
+      <div class="unit"><div class="num" id="days">0</div><span class="label">Días</span></div>
+      <div class="unit"><div class="num" id="hours">00</div><span class="label">Horas</span></div>
+      <div class="unit"><div class="num" id="minutes">00</div><span class="label">Minutos</span></div>
+      <div class="unit"><div class="num" id="seconds">00</div><span class="label">Segundos</span></div>
+    </div>
+    <div id="status">Cargando...</div>
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    function pad(n){ return String(n).padStart(2,'0'); }
+
+    const nextShows = [
+      new Date('2025-10-23T06:24:00'),
+      new Date('2025-10-24T06:24:00'),
+      new Date('2025-10-25T06:24:00')
+    ];
+
+    function getNextShow(){
+      const now = new Date();
+      return nextShows.find(d => d > now) || null;
+    }
+
+    function updateCountdown(){
+      const target = getNextShow();
+      if(!target){
+        $('days').textContent = '0';
+        $('hours').textContent = '00';
+        $('minutes').textContent = '00';
+        $('seconds').textContent = '00';
+        $('status').textContent = 'No hay próximas emisiones.';
+        return;
+      }
+      const diff = Math.max(0, target - new Date());
+      const sec = Math.floor(diff/1000);
+      const days = Math.floor(sec / 86400);
+      const hours = Math.floor((sec % 86400) / 3600);
+      const minutes = Math.floor((sec % 3600) / 60);
+      const seconds = sec % 60;
+
+      $('days').textContent = days;
+      $('hours').textContent = pad(hours);
+      $('minutes').textContent = pad(minutes);
+      $('seconds').textContent = pad(seconds);
+      $('status').textContent = 'Faltan ' + days + ' días y ' + pad(hours) + ':' + pad(minutes) + ':' + pad(seconds) + ' para la próxima emisión.';
+    }
+
+    setInterval(updateCountdown, 250);
+    updateCountdown();
+  </script>
+</body>
+</html>
