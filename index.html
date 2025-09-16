@@ -5,29 +5,18 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Cuenta atrás - Sherlock Yack en Clan</title>
 
-  <!-- Favicon (logo de Clan en la pestaña) -->
   <link rel="icon" type="image/png" href="clan.png">
-
-  <!-- Fuente -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
-  <!-- Open Graph / Twitter Card -->
-  <meta property="og:title" content="Cuenta atrás - Sherlock Yack en Clan">
-  <meta property="og:description" content="Cuenta atrás para la próxima emisión de Sherlock Yack en Clan TV">
-  <meta property="og:image" content="logo.png">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="logo.png">
 
   <style>
     html,body{height:100%;margin:0;font-family:'Press Start 2P',monospace;background:black;color:white}
     body{display:flex;align-items:center;justify-content:center;overflow:hidden}
 
-    .background {
-  position: fixed; inset: 0;
-  background: url('sherlock.png') no-repeat center center;
-  background-size: cover;
-  z-index: 0; /* antes estaba -2 */
+    .background{
+      position:fixed; inset:0;
+      background: url('sherlock.png') no-repeat center center;
+      background-size: cover;
+      z-index:0;
     }
     @keyframes moveBg{
       0% {transform: scale(1);}
@@ -35,11 +24,7 @@
       100% {transform: scale(1);}
     }
 
-    .overlay-bg{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,0.2); /* más transparente para que se vea bien */
-      z-index:-1;
-    }
+    .overlay-bg{position:fixed; inset:0; background:rgba(0,0,0,0.2); z-index:-1;}
 
     .card{
       background: rgba(0,0,0,0.6);
@@ -54,9 +39,7 @@
     }
 
     .logo{width:90px;margin-bottom:20px;display:inline-block}
-
     h1{margin:0 0 12px;font-size:1.9rem;color:white}
-
     p.lead{margin:0 0 14px;color:#ffd; font-size:0.78rem}
 
     .timer{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:12px}
@@ -65,29 +48,11 @@
     .label{font-size:0.68rem;margin-top:6px;display:block;color:#e8e8e8}
     #status{margin-top:14px;color:#ffd700;font-size:0.78rem}
 
-    /* Playlist más pequeña */
-    .player-wrap{
-      position:fixed;
-      bottom:20px; right:20px;
-      width:260px; height:160px;
-      z-index:5;
-    }
-    .player-card{
-      background: rgba(0,0,0,0.55);
-      border-radius:12px;
-      padding:6px;
-      box-shadow:0 6px 20px rgba(0,0,0,0.5);
-      height:100%;
-    }
+    .player-wrap{position:fixed; bottom:20px; right:20px; width:260px; height:160px; z-index:5;}
+    .player-card{background: rgba(0,0,0,0.55); border-radius:12px; padding:6px; box-shadow:0 6px 20px rgba(0,0,0,0.5); height:100%;}
     .player-frame{width:100%;height:100%;border-radius:8px;overflow:hidden}
     .player-frame iframe{width:100%;height:100%;border:0;display:block}
-
-    .player-text{
-      font-size:0.6rem;
-      color:#fff;
-      margin-bottom:4px;
-      text-align:center;
-    }
+    .player-text{font-size:0.6rem; color:#fff; margin-bottom:4px; text-align:center;}
 
     @media (max-width:600px){
       .card{width:calc(100% - 40px);margin-right:0;padding:28px}
@@ -114,7 +79,6 @@
     <div id="status">Cargando...</div>
   </div>
 
-  <!-- YouTube Player pequeño en la esquina -->
   <div class="player-wrap">
     <div class="player-card">
       <div class="player-text">De mientras puedes ver episodios aquí</div>
@@ -127,15 +91,50 @@
     </div>
   </div>
 
+  <!-- Librería de confeti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <script>
     const $ = id => document.getElementById(id);
     function pad(n){ return String(n).padStart(2,'0'); }
+
     const nextShows = [
       new Date('2025-10-23T06:24:00'),
       new Date('2025-10-24T06:24:00'),
       new Date('2025-10-25T06:24:00')
     ];
-    function getNextShow(){ const now=new Date(); return nextShows.find(d=>d>now)||null; }
+
+    function getNextShow(){ 
+      const now=new Date(); 
+      return nextShows.find(d=>d>now)||null; 
+    }
+
+    let celebrationStarted = false;
+
+    function startConfetti(){
+      const duration = 10 * 1000; // 10 segundos
+      const end = Date.now() + duration;
+
+      (function frame(){
+        confetti({
+          particleCount: 5,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 }
+        });
+        confetti({
+          particleCount: 5,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 }
+        });
+
+        if(Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      })();
+    }
+
     function updateCountdown(){
       const target=getNextShow();
       if(!target){
@@ -146,18 +145,32 @@
         $('status').textContent='No hay próximas emisiones.';
         return;
       }
-      const diff=Math.max(0,target-new Date());
+      const now = new Date();
+      const diff=Math.max(0,target-now);
       const sec=Math.floor(diff/1000);
       const days=Math.floor(sec/86400);
       const hours=Math.floor((sec%86400)/3600);
       const minutes=Math.floor((sec%3600)/60);
       const seconds=sec%60;
+
+      if(diff === 0 && !celebrationStarted){
+        $('days').textContent='0';
+        $('hours').textContent='00';
+        $('minutes').textContent='00';
+        $('seconds').textContent='00';
+        $('status').textContent='🎉 YA EN TRANSMISIÓN 🎉';
+        celebrationStarted = true;
+        startConfetti();
+        return;
+      }
+
       $('days').textContent=days;
       $('hours').textContent=pad(hours);
       $('minutes').textContent=pad(minutes);
       $('seconds').textContent=pad(seconds);
       $('status').textContent='Faltan '+days+' días y '+pad(hours)+':'+pad(minutes)+':'+pad(seconds)+' para la próxima emisión.';
     }
+
     setInterval(updateCountdown,250);
     updateCountdown();
   </script>
