@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Cuenta atrás - Sherlock Yack en Clan</title>
 
-  <!-- Favicon (logo en la pestaña del navegador) -->
-  <link rel="icon" type="image/png" href="logo.png">
+  <!-- Favicon (logo de Clan en la pestaña del navegador) -->
+  <link rel="icon" type="image/png" href="clan.png">
 
   <!-- Fuente estilo retro -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-  <!-- Open Graph / Twitter Card para redes -->
+  <!-- Open Graph / Twitter Card para que aparezca el logo de la web al compartir -->
   <meta property="og:title" content="Cuenta atrás - Sherlock Yack en Clan">
   <meta property="og:description" content="Cuenta atrás para la próxima emisión de Sherlock Yack en Clan TV">
   <meta property="og:image" content="logo.png">
@@ -36,7 +36,6 @@
       text-shadow:2px 2px 6px #000;
     }
 
-    /* Fondo animado */
     .background{
       position:fixed;
       top:0; left:0;
@@ -53,7 +52,6 @@
       100% {transform: scale(1) translate(0,0);}
     }
 
-    /* Overlay de brillo */
     .overlay-bg{
       position:fixed;
       top:0; left:0;
@@ -70,7 +68,6 @@
       100% {background: rgba(0,0,0,0.4);}
     }
 
-    /* Overlay del contador */
     .overlay{
       background: rgba(0,0,0,0.6);
       padding:40px 30px;
@@ -80,7 +77,6 @@
       animation: fadeIn 1.2s ease-out;
     }
 
-    /* Logo visible en la web */
     .logo{
       width:80px;
       margin-bottom:20px;
@@ -138,7 +134,7 @@
   <div class="overlay-bg"></div>
 
   <div class="overlay">
-    <!-- Logo arriba del título -->
+    <!-- Logo visible en la web -->
     <img src="logo.png" alt="Logo Sherlock Yack" class="logo">
 
     <h1>¡Sherlock Yack llega a Clan!</h1>
@@ -155,7 +151,6 @@
   </div>
 
   <script>
-    // Contador
     const $ = id => document.getElementById(id);
     function pad(n){ return String(n).padStart(2,'0'); }
 
